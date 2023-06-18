@@ -3,7 +3,7 @@ from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # specify the paths to your training and validation directories
-train_dir = 'Training'
+train_dir = 'C:/Users/sunil/Documents/GitHub/Deep-Feedforward-neural-network-in-Keras/Training'
 
 # Training/
 # │
@@ -17,7 +17,7 @@ train_dir = 'Training'
 #     ├── human02.jpg
 #     └── ...
 
-validation_dir = 'Validation'
+validation_dir = 'C:/Users/sunil/Documents/GitHub/Deep-Feedforward-neural-network-in-Keras/Validation'
 # validation_dir/
 # │
 # ├── horses/
