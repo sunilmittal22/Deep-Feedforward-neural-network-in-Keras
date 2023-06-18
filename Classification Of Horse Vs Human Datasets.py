@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+tf.config.run_functions_eagerly(True)
 # specify the paths to your training and validation directories
 train_dir = 'C:/Users/sunil/Documents/GitHub/Deep-Feedforward-neural-network-in-Keras/Training'
 
@@ -59,10 +60,37 @@ validation_generator = validation_datagen.flow_from_directory(
         batch_size=128,
         class_mode='binary')
 
-history = model.fit(
-      train_generator,
-      steps_per_epoch=8,  
-      epochs=15,
-      verbose=1,
-      validation_data=validation_generator,
-      validation_steps=8)
+train_dataset = tf.data.Dataset.from_generator(
+    lambda: train_generator,
+    output_signature=(
+        tf.TensorSpec(shape=(32, 150, 150, 3), dtype=tf.float32),
+        tf.TensorSpec(shape=(32,), dtype=tf.int32))
+).repeat()
+
+validation_dataset = tf.data.Dataset.from_generator(
+    lambda: validation_generator,
+    output_signature=(
+        tf.TensorSpec(shape=(32, 150, 150, 3), dtype=tf.float32),
+        tf.TensorSpec(shape=(32,), dtype=tf.int32))
+).repeat()
+
+# determine the number of steps per epoch
+steps_per_epoch = train_generator.samples // train_generator.batch_size
+validation_steps = validation_generator.samples // validation_generator.batch_size
+
+# history = model.fit(
+#       train_generator,
+#       steps_per_epoch=8,  
+#       epochs=15,
+#       verbose=1,
+#       validation_data=validation_generator,
+#       validation_steps=8)
+# train the model
+
+history = model.fit(train_dataset,
+                    validation_data=validation_dataset,
+                    steps_per_epoch=steps_per_epoch,
+                    validation_steps=validation_steps,
+                    epochs=10,
+                    verbose=1
+                    )
